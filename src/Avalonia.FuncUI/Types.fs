@@ -75,11 +75,12 @@ module Types =
                 match other with
                 | :? Subscription as other -> 
                     this.name = other.name &&
-                    this.funcType = other.funcType
+                    this.funcType = other.funcType &&
+                    this.func = other.func
                 | _ -> false
                 
             override this.GetHashCode () =
-                (this.name, this.funcType).GetHashCode()
+                (this.name, this.funcType, this.func).GetHashCode()
                                
     type IAttr =
         abstract member UniqueName : string
