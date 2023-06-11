@@ -1,13 +1,11 @@
 namespace Examples.Presso
 
-open Avalonia
-
 [<AutoOpen>]
 module Extensions =
     open System
     open Avalonia.Media.Imaging
     open Avalonia.Platform
-    
+
     type Bitmap with
         static member Create (s: string) : Bitmap =
             let uri =
@@ -18,5 +16,4 @@ module Extensions =
             if uri.IsAbsoluteUri && uri.IsFile then
                 new Bitmap(uri.LocalPath)
             else
-                let assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
-                new Bitmap(assets.Open(uri));
+                new Bitmap(AssetLoader.Open(uri));

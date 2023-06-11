@@ -9,7 +9,7 @@ open Avalonia.FuncUI.ControlCatalog.Views
 open Avalonia.Themes.Fluent
 open Avalonia.FuncUI
 
-type MainWindow() as this =
+type MainWindow() =
     inherit HostWindow()
 
     do
@@ -17,7 +17,7 @@ type MainWindow() as this =
         base.Height <- 600.0
         base.Width <- 800.0
 
-        this.VisualRoot.Renderer.Diagnostics.DebugOverlays <- Avalonia.Rendering.RendererDebugOverlays.Fps
+        // this.VisualRoot.Renderer <- Avalonia.Rendering.RendererDebugOverlays.Fps
         //this.VisualRoot.VisualRoot.Renderer.DrawDirtyRects <- true
         ()
 
@@ -33,14 +33,14 @@ type App() =
             match this.ApplicationLifetime with
             | :? ISingleViewApplicationLifetime as single ->
                 let mainView = HostControl()
-                single.MainView <-mainView
+                single.MainView <- mainView
                 Some (mainView :> IViewHost)
-               
+
             | :? IClassicDesktopStyleApplicationLifetime as desktopLifetime ->
                 let mainWindow = MainWindow()
                 desktopLifetime.MainWindow <- mainWindow
                 Some mainWindow
-            
+
             | _ -> None
 
         match host with
