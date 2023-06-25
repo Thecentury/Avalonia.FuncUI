@@ -34,7 +34,7 @@ module internal rec Delta =
             | Content' content -> Content (ContentDelta.From content)
             | Subscription' subscription -> Subscription (SubscriptionDelta.From subscription)
             | InitFunction bindingSetup -> SetupFunction bindingSetup
-            | _ -> raise (Exception "unknown IAttr type. (not a Property, Content ore Subscription attribute)")
+            | _ -> raise (Exception "Unknown IAttr type (not a Property, Content or Subscription attribute)")
 
 
     [<CustomEquality; NoComparison>]
