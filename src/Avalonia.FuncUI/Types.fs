@@ -4,7 +4,6 @@ open Avalonia
 open Avalonia.Controls
 open System
 open System.Threading
-open Avalonia.Data
 
 module Types =
 
