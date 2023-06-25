@@ -257,11 +257,14 @@ type Context (componentControl: Avalonia.Controls.Border) =
 
                 if stateHook.RenderOnChange then
                     disposables.Add (
+                        let componentCtx = this :> IComponentContext
+                        let forceRenderAction = Action (fun () -> componentCtx.forceRender())
                         state.Subscribe (fun _ ->
                             (* render the component when a hook's state changed. *)
                             Dispatcher.UIThread.Post(
-                                action = (fun _ -> (this :> IComponentContext).forceRender()),
-                                priority = DispatcherPriority.Background
+                                action = forceRenderAction
+                                // Priority is not specified as sometimes it causes callback not to be called on iOS.
+                                // priority = DispatcherPriority.Background
                             )
                         )
                     )
