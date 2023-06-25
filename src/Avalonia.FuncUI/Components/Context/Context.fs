@@ -321,7 +321,7 @@ type Context (componentControl: Avalonia.Controls.Border) =
             this.useEffectHook (
                 EffectHook.Create(
                     identity = callingIndex,
-                    effect = (fun _ -> effect(); null),
+                    effect = (fun () -> effect(); null),
                     triggers = triggers
                 )
             )
@@ -339,7 +339,7 @@ type Context (componentControl: Avalonia.Controls.Border) =
             this.useStateHook<'value>(
                 StateHook.Create (
                     identity = callingIndex,
-                    state = StateHookValue.Lazy (fun _ -> obtainState() :> IAnyReadable),
+                    state = StateHookValue.Lazy (fun () -> obtainState() :> IAnyReadable),
                     renderOnChange = defaultArg renderOnChange true
                 )
             ) :?> IWritable<'value>
@@ -357,7 +357,7 @@ type Context (componentControl: Avalonia.Controls.Border) =
             this.useStateHook<'value>(
                 StateHook.Create (
                     identity = callingIndex,
-                    state = StateHookValue.Lazy (fun _ -> new State<'value>(initialValue) :> IAnyReadable),
+                    state = StateHookValue.Lazy (fun () -> new State<'value>(initialValue) :> IAnyReadable),
                     renderOnChange = defaultArg renderOnChange true
                 )
             ) :?> IWritable<'value>
@@ -366,7 +366,7 @@ type Context (componentControl: Avalonia.Controls.Border) =
             this.useStateHook<'value>(
                 StateHook.Create (
                     identity = callingIndex,
-                    state = StateHookValue.Lazy (fun _ -> new State<'value>(buildInitialValue()) :> IAnyReadable),
+                    state = StateHookValue.Lazy (fun () -> new State<'value>(buildInitialValue()) :> IAnyReadable),
                     renderOnChange = defaultArg renderOnChange true
                 )
             ) :?> IWritable<'value>
