@@ -54,7 +54,7 @@ type internal EffectQueue () =
 
                     let detached =
                         detached
-                        |> List.distinctBy (fun effect -> effect.Identity)
+                        |> Seq.distinctBy (fun effect -> effect.Identity)
 
                     for effect in detached do
                         disposables.Add (effect.Handler ())
