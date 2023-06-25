@@ -12,10 +12,12 @@ type ElmishState<'model, 'msg, 'arg>(mkProgram : unit -> Program<'arg, 'model, '
 
     let setState model dispatch =
         _dispatch <- dispatch
-        if not (obj.ReferenceEquals(model, _model)) then
+        let changed = not (System.Collections.Generic.EqualityComparer.Default.Equals(_model, model))
+        if changed then
+        // if not (obj.ReferenceEquals(model, _model)) then
             _model <- model
             setModel model
-    do  
+    do
         program
         |> Program.withSetState setState
         |> Program.runWith arg
