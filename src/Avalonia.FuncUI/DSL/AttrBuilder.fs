@@ -28,7 +28,6 @@ open Avalonia.Controls
 open Avalonia.FuncUI.DSL
 open Avalonia.FuncUI.Types
 open Avalonia.FuncUI.Library
-open System.Diagnostics.CodeAnalysis
 
 module private Helpers =
 

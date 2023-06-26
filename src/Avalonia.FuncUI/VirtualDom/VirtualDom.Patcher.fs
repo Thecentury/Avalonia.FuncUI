@@ -8,7 +8,6 @@ module internal rec Patcher =
     open System.Collections.Concurrent
     open Avalonia.Controls
     open Avalonia
-    open Avalonia.FuncUI.VirtualDom.Delta
     open Avalonia.FuncUI.Library
     open Avalonia.FuncUI.Types
     open System.Threading
@@ -155,7 +154,7 @@ module internal rec Patcher =
                 | ValueSome setter -> ValueSome (fun value -> setter(view, value))
                 | ValueNone -> ValueNone
 
-            patch (getter ,setter)
+            patch (getter, setter)
 
         | Accessor.AvaloniaProperty property ->
             let getter = ValueSome (fun () -> view.GetValue(property))
