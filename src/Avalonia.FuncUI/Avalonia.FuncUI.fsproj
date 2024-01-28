@@ -46,10 +46,10 @@
     <Compile Include="Components\State\State.fs" />
     <Compile Include="Components\State\State.Adapters.fs" />
     <Compile Include="Components\State\State.Functions.fs" />
-    <Compile Include="Components\StaticComponent.fs" />
     <Compile Include="Components\Context\Context.EffectsHook.fs" />
     <Compile Include="Components\Context\Context.StateHook.fs" />
     <Compile Include="Components\Context\Context.fs" />
+    <Compile Include="Components\ComponentBase.fs" />
     <Compile Include="Components\Component.fs" />
     <Compile Include="Hosts.fs" />
     <Compile Include="DataTemplateView.fs" />
@@ -155,6 +155,7 @@
     <Compile Include="DSL\Viewbox.fs" />
     <Compile Include="DSL\SelectableTextBlock.fs" />
     <Compile Include="DSL\DataGrid.fs" />
+    <Compile Include="DSL\PathIcon.fs" />
     <Compile Include="DSL\DragDrop.fs" />
   </ItemGroup>
 
@@ -163,8 +164,11 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <Compile Include="Experimantal\Experimental.Animations.fs" />
-    <Compile Include="Experimantal\Experimental.EnvironmentState.fs" />
+    <Compile Include="Experimental\Experimental.StaticComponent.fs" />
+    <Compile Include="Experimental\Experimental.Animations.fs" />
+    <Compile Include="Experimental\Experimental.EnvironmentState.fs" />
+    <Compile Include="Experimental\Experimental.Operators.fs" />
+    <Compile Include="Experimental\Experimental.Hooks.fs" />
   </ItemGroup>
 
 </Project>
