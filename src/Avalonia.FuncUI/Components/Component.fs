@@ -1,19 +1,15 @@
 ﻿namespace Avalonia.FuncUI
 
-open System
 open System.Diagnostics.CodeAnalysis
-open Avalonia.Controls
 open Avalonia.FuncUI
 open Avalonia.FuncUI.Types
-open Avalonia.FuncUI.VirtualDom
-open Avalonia.Threading
 
 [<AllowNullLiteral>]
 [<DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)>]
-type Component (render: IComponentContext -> IView) as this =
+type Component (render: IComponentContext -> IView) =
     inherit ComponentBase ()
 
-    override this.Render ctx =
+    override _.Render ctx =
         render ctx
 
 type Component with
