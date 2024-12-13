@@ -70,18 +70,9 @@ The same counter as above but using the `Avalonia.FuncUI.Elmish` package:
 
 ```f#
 module Counter =
-
-    type CounterState = {
-        count : int
-    }
-
-    let init = {
-        count = 0
-    }
-
-    type Msg =
-        | Increment
-        | Decrement
+    type CounterState = { count : int }
+    let init = { count = 0 }
+    type Msg = Increment | Decrement
 
     let update (msg: Msg) (state: CounterState) : CounterState =
         match msg with
@@ -113,10 +104,27 @@ Find more examples using Elmish in the [Elmish Examples folder](https://github.c
 
 The current co-maintainers of Avalonia.FuncUI are
 
+* @Numpsy
 * @JordanMarr
 * @sleepyfran
 * @JaggerJo (project originator)
 
 The default maintainer account for projects under "fsprojects" is @fsprojectsgit - F# Community Project Incubation Space (repo management)
+
+# Commercial Support
+**Provided by [Voynoic Systems GmbH](https://www.voyonic-systems.de)**
+
+Please reach out to contact@voyonic-systmes.de if you need a commercial support contract or are interested in contract work.
+
+# Star History 
+
+<a href="https://star-history.com/#fsprojects/Avalonia.FuncUI&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=fsprojects/Avalonia.FuncUI&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=fsprojects/Avalonia.FuncUI&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=fsprojects/Avalonia.FuncUI&type=Date" />
+  </picture>
+</a>
+
 
 

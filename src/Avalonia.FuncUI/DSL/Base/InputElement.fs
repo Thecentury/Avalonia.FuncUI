@@ -1,12 +1,13 @@
 namespace Avalonia.FuncUI.DSL
 
+open Avalonia.Input
 open Avalonia.Interactivity
 
 [<AutoOpen>]
 module InputElement =
+    open Avalonia.FuncUI
     open Avalonia.FuncUI.Types
     open Avalonia.FuncUI.Builder
-    open Avalonia.Input
 
     type InputElement with
         static member focusable<'t when 't :> InputElement>(value: bool) : IAttr<'t> =
@@ -20,6 +21,21 @@ module InputElement =
 
         static member isHitTestVisible<'t when 't :> InputElement>(value: bool) : IAttr<'t> =
             AttrBuilder<'t>.CreateProperty<bool>(InputElement.IsHitTestVisibleProperty, value, ValueNone)
+
+        static member isTabStop<'t when 't :> InputElement>(value: bool) : IAttr<'t> =
+            AttrBuilder<'t>.CreateProperty<bool>(InputElement.IsTabStopProperty, value, ValueNone)
+
+        static member tabIndex<'t when 't :> InputElement>(value: int) : IAttr<'t> =
+            AttrBuilder<'t>.CreateProperty<int>(InputElement.TabIndexProperty, value, ValueNone)
+
+        static member keyBindings<'t when 't :> InputElement>(value: KeyBinding list) : IAttr<'t> =
+            let name = nameof Unchecked.defaultof<'t>.KeyBindings
+            let getter: 't -> KeyBinding list = (fun control -> Seq.toList control.KeyBindings)
+            let setter: 't * KeyBinding list -> unit = (fun (control, value) -> Setters.iList control.KeyBindings value)
+            let compare: obj * obj -> bool = EqualityComparers.compareSeq<KeyBinding list,_>
+            let factory = fun () -> []
+
+            AttrBuilder<'t>.CreateProperty<KeyBinding list>(name, value, ValueSome getter, ValueSome setter, ValueSome compare, factory)
 
         static member onGotFocus<'t when 't :> InputElement>(func: GotFocusEventArgs -> unit, ?subPatchOptions) =
             AttrBuilder<'t>.CreateSubscription<GotFocusEventArgs>(InputElement.GotFocusEvent, func, ?subPatchOptions = subPatchOptions)
