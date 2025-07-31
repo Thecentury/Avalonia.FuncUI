@@ -1,5 +1,6 @@
 namespace Avalonia.FuncUI.VirtualDom
 
+open Avalonia.FuncUI
 open Avalonia.FuncUI.VirtualDom.Delta
 
 module internal rec Patcher =
@@ -29,6 +30,7 @@ module internal rec Patcher =
         match attr.Func with
         // add or update
         | Some handler ->
+            Performance.addMeasurement $"Add subscription {attr.Name}" 1
             let cts = attr.Subscribe(view, handler)
 
             let addFactory = Func<string, CancellationTokenSource>(fun key -> cts)
@@ -44,6 +46,7 @@ module internal rec Patcher =
         | None ->
             let hasValue, value = subscriptions.TryGetValue(attr.UniqueName)
             if hasValue then
+                Performance.addMeasurement $"Remove subscription {attr.Name}" 1
                 value.Cancel()
                 subscriptions.TryRemove(attr.UniqueName) |> ignore
 
@@ -52,9 +55,11 @@ module internal rec Patcher =
         | Accessor.AvaloniaProperty avaloniaProperty ->
             match attr.Value with
             | Some value ->
+                Performance.addMeasurement $"Set {avaloniaProperty.Name}" 1
                 view.SetValue(avaloniaProperty, value)
                 |> ignore
             | None ->
+                Performance.addMeasurement $"Erase {avaloniaProperty.Name}" 1
                 match attr.DefaultValueFactory with
                 | ValueNone ->
                     view.ClearValue(avaloniaProperty)
@@ -79,7 +84,9 @@ module internal rec Patcher =
                         | false -> null
 
             match instanceProperty.Setter with
-            | ValueSome setter -> setter (view, value)
+            | ValueSome setter ->
+              Performance.addMeasurement $"Set {instanceProperty.Name}" 1
+              setter (view, value)
             | ValueNone -> failwithf "instance property ('%s') has no setter. " instanceProperty.Name
 
     let private patchContentMultiple (view: AvaloniaObject, accessor: Accessor, delta: ViewDelta list) : unit =
@@ -100,18 +107,22 @@ module internal rec Patcher =
                             | _ ->
                                 // replace
                                 let newItem = Patcher.create viewElement
+                                Performance.addMeasurement $"Create {viewElement.ViewType.Name}" 1
                                 collection.[index] <- newItem
                         else
                             // replace
                             let newItem = Patcher.create viewElement
+                            Performance.addMeasurement $"Create {viewElement.ViewType.Name}" 1
                             collection.[index] <- newItem
                     else
                         // create
                         let newItem = Patcher.create viewElement
+                        Performance.addMeasurement $"Create {viewElement.ViewType.Name}" 1
                         collection.Add(newItem) |> ignore
                 )
 
                 while delta.Length < collection.Count do
+                    Performance.addMeasurement "Remove content element" 1
                     collection.RemoveAt (collection.Count - 1)
 
         (* read only, so there must be a get accessor *)
@@ -137,7 +148,9 @@ module internal rec Patcher =
 
             | :? IEnumerable as enumerable ->
                 match setValue with
-                | ValueSome set -> set (patch_IEnumerable enumerable)
+                | ValueSome set ->
+                  Performance.addMeasurement "Set collection property" 1
+                  set (patch_IEnumerable enumerable)
                 | ValueNone -> failwith "accessor must have a setter"
 
             | _ -> raise (Exception("type does not implement IEnumerable or IList. This is required for view patching"))
@@ -153,7 +166,6 @@ module internal rec Patcher =
                 match instanceProperty.Setter with
                 | ValueSome setter -> ValueSome (fun value -> setter(view, value))
                 | ValueNone -> ValueNone
-
             patch (getter, setter)
 
         | Accessor.AvaloniaProperty property ->
@@ -171,10 +183,12 @@ module internal rec Patcher =
                 if shouldPatch (value, viewElement) then
                     Patcher.patch(value :?> AvaloniaObject, viewElement)
                 else
+                    Performance.addMeasurement $"Set {property.Name}" 1
                     let createdControl = Patcher.create viewElement
                     view.SetValue(property, createdControl)
                     |> ignore
             | None ->
+                Performance.addMeasurement $"Erase {property.Name}" 1
                 view.ClearValue(property)
 
         let patch_instance (property: PropertyAccessor) =
@@ -191,11 +205,15 @@ module internal rec Patcher =
                     let createdControl = Patcher.create(viewElement)
 
                     match property.Setter with
-                    | ValueSome setter -> setter(view, createdControl)
+                    | ValueSome setter ->
+                      Performance.addMeasurement $"Set {property.Name}" 1
+                      setter(view, createdControl)
                     | _ -> failwith "Property Accessor needs a setter"
             | None ->
                 match property.Setter with
-                | ValueSome setter -> setter(view, null)
+                | ValueSome setter ->
+                  Performance.addMeasurement $"Erase {property.Name}" 1
+                  setter(view, null)
                 | _ -> failwith "Property Accessor needs a setter"
 
         match accessor with

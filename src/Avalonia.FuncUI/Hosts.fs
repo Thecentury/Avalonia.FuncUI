@@ -1,6 +1,7 @@
 ﻿namespace Avalonia.FuncUI.Hosts
 
 open Avalonia.Controls
+open Avalonia.FuncUI
 open Avalonia.Styling
 open Avalonia.FuncUI.Types
 open Avalonia.FuncUI.VirtualDom
@@ -14,6 +15,7 @@ type HostWindow() as this =
     let mutable lastViewElement : IView option = None
 
     let update (nextViewElement : IView option) : unit =
+        use _ = Performance.step "Diff and patch"
         VirtualDom.updateRoot (this, lastViewElement, nextViewElement)
         lastViewElement <- nextViewElement
 
@@ -27,6 +29,7 @@ type HostControl() as this =
     let mutable lastViewElement : IView option = None
 
     let update (nextViewElement : IView option) : unit =
+        use _ = Performance.step "Diff and patch"
         VirtualDom.updateRoot (this, lastViewElement, nextViewElement)
         lastViewElement <- nextViewElement
 

@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <Compile Include="Assembly.fs" />
+    <Compile Include="Performance.fs" />
     <Compile Include="Library.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="VirtualDom\VirtualDom.Misc.fs" />

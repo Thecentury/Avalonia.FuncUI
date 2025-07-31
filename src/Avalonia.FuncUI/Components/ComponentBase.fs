@@ -31,12 +31,15 @@ type ComponentBase() as this =
         context.AfterRender ()
 
         // update view
+        let s = Performance.step "Update view"
         VirtualDom.updateBorderRoot (this, lastViewElement, nextViewElement)
+        s.Dispose ()
         lastViewElement <- nextViewElement
 
         let nextViewAttrs = context.ComponentAttrs
 
         // update attrs
+        let s = Performance.step "Update attrs"
         Patcher.patch (
             this,
             { Delta.ViewDelta.ViewType = typeof<Border>
@@ -45,6 +48,7 @@ type ComponentBase() as this =
               Delta.ViewDelta.Outlet = ValueNone
               Delta.ViewDelta.Attrs = Differ.diffAttributes (lastViewAttrs, nextViewAttrs) }
         )
+        s.Dispose ()
 
         lastViewAttrs <- nextViewAttrs
 
